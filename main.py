@@ -1,6 +1,6 @@
 from web_scraper.scraper import get_all_products
 from web_scraper.detail_scraper import scrape_product_details
-from db.database import get_connection, create_table, save_products
+from db.database import get_connection, create_table, save_product
 
 def main():
     conn = get_connection()
@@ -11,7 +11,7 @@ def main():
     for product in products:
         specs = scrape_product_details(product['Link'])
         product.update(specs)
-        save_products(conn, product)
+        save_product(conn, product)
     
     conn.close()
 
