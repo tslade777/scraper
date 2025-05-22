@@ -21,7 +21,7 @@ class BowlingBall(SQLModel, table=True):
     rg: Optional[float] = None               # Radius of Gyration
     diff: Optional[float] = None             # Differential
     mass_bias: Optional[float] = None        # Intermediate Differential (if asymmetric)
-    upload_date: date = Field(default_factory=datetime.now(timezone.utc))
-    last_updated: Optional[date] = Field(default_factory=datetime.now(timezone.utc))
+    upload_date: date = Field(default_factory=lambda: datetime.now(timezone.utc))
+    last_updated: Optional[date] = Field(default_factory=lambda: datetime.now(timezone.utc))
     original_price: Optional[str] = None
     discounted_price: Optional[str] = None

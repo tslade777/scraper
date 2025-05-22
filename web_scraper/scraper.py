@@ -42,12 +42,16 @@ def get_all_products():
             discounted_price = discounted_price_tag.text.strip() if discounted_price_tag else "No discount"
 
             item = {
-                "Title": title,
-                "Link": link,
-                "Image URL": image_url,
-                "Original Price": original_price,
-                "Discounted Price": discounted_price
+                "title": title,
+                "link": link,
+                "image_url": image_url,
+                "original_price": original_price,
+                "discounted_price": discounted_price
             }
-            data.append(item)
 
-        return data 
+            data.append(item)
+        print(f"Page {page} scraped.")
+        page += 1
+        
+
+    return data 
