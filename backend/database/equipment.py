@@ -18,3 +18,7 @@ def create_ball(session: Session, ball: BowlingBall) -> BowlingBall:
 
 def fetch_all_balls(session: Session):
     return session.exec(select(BowlingBall)).all()
+
+def fetch_ball(session: Session, id:int):
+    result = session.exec(select(BowlingBall).where(BowlingBall.id == id))
+    return result.first()
