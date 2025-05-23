@@ -31,8 +31,11 @@ def save_bowling_ball(ball_data: dict):
         "rg": _to_float(ball_data.get("rg")),
         "diff": _to_float(ball_data.get("diff")),
         "mass_bias": _to_float(ball_data.get("mass_bias")),
-        "original_price": ball_data.get("Original Price"),
-        "discounted_price": ball_data.get("Discounted Price")
+        "original_price": ball_data.get("original_price"),
+        "discounted_price": ball_data.get("discounted_price"),
+        "color" : ball_data.get("color"),
+        "finish" : ball_data.get("finish"),
+        "flare" : ball_data.get("flare")
     }
 
     with Session(engine) as session:

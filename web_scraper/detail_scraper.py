@@ -14,28 +14,70 @@ def scrape_product_details(link):
     specs = table.select("tr.woocommerce-product-attributes-item")
 
     label_map = {
-        "Coverstock": "coverstock",
-        "Core": "core",
-        "Scent": "scent",
-        "RG": "rg",
-        "Differential": "diff",
-        "Intermediate Differential": "mass_bias",
-        "Brand": "brand",
-        "Release Date": "release_date"
+        "coverstock": "coverstock",
+        "coverstock name": "coverstock_name",
+        "core": "core",
+        "core name": "core_name",
+        "scent": "scent",
+        "rg": "rg",
+        "differential": "diff",
+        "mass bias": "mass_bias",
+        "brand": "brand",
+        "release date": "release_date",
+        "color": "color",
+        "finish": "finish",
+        "flare": "flare"
     }
 
-    for spec in specs: 
-        label = spec.select_one("th").get_text(strip=True)
-        value = spec.select_one("td").get_text(strip=True)
-        
-        label_lower = label.lower()
 
-        field = None
-        for key, mapped_field in label_map.items():
-            if key.lower() in label_lower:
-                field = mapped_field
-                break
+    for spec in specs: 
+        th = spec.select_one("th")
+        td = spec.select_one("td")
+
+        if not th or not td:
+            continue
+
+        raw_label = th.get_text(strip=True)
+        value = td.get_text(strip=True)
+
+        normalized_label = normalize_label(raw_label)
+
+        field = label_map.get(normalized_label)
+
         if field:
             item[field] = value
+        else:
+            print(f"⚠️ Unmatched label: {raw_label} → {normalized_label}")
     
     return item
+
+def normalize_label(label: str) -> str:
+    label_lower = label.lower()
+    result = ""
+    if "core name" in label_lower:
+        result = "core name"
+    elif "core type" in label_lower or "core shape" in label_lower:
+        result = "core"
+    elif "cover name" in label_lower:
+        result = "coverstock name"
+    elif "coverstock type" in label_lower:
+        result = "coverstock"
+    elif "mass bias" in label_lower:
+        result = "mass bias"
+    elif "radius of gyration" in label_lower:
+        result = "rg"
+    elif "differential" in label_lower:
+        result = "differential"
+    elif "color" in label_lower:
+        result = "color"
+    elif "brand" in label_lower:
+        result = "brand"
+    elif "scent" in label_lower:
+        result = "scent"
+    elif "surface finish" in label_lower:
+        result = "finish"
+    elif "flare potential" in label_lower:
+        result = "flare"
+    elif "release date" in label_lower:
+        result = "release date"
+    return result

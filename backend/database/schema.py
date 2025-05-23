@@ -25,3 +25,6 @@ class BowlingBall(SQLModel, table=True):
     last_updated: Optional[date] = Field(default_factory=lambda: datetime.now(timezone.utc))
     original_price: Optional[str] = None
     discounted_price: Optional[str] = None
+    color : Optional[str] = None
+    finish : Optional[str] = None
+    flare : Optional[str] = None

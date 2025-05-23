@@ -20,4 +20,8 @@ class BowlingBall(BaseModel):
     last_updated: Optional[date]
     original_price: Optional[str] = None
     discounted_price: Optional[str] = None
+    color : Optional[str] = None
+    finish : Optional[str] = None
+    flare : Optional[str] = None
+
     
