@@ -26,7 +26,7 @@ def save_bowling_ball(ball_data: dict):
         "core": ball_data.get("core"),
         "coverstock": ball_data.get("coverstock"),
         "scent": ball_data.get("scent"),
-       "release_date": _to_date(ball_data.get("release_date")),
+        "release_date": _to_date(ball_data.get("release_date")),
         "image_url": ball_data.get("image_url") or ball_data.get("Image URL"),
         "rg": _to_float(ball_data.get("rg")),
         "diff": _to_float(ball_data.get("diff")),
