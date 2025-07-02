@@ -1,8 +1,11 @@
+import requests  # ✅ CORRECT!
 from sqlmodel import Session, select
 from backend.database.schema import BowlingBall
 from backend.dependencies import engine  # where your DB connection is defined
 from dateutil.parser import parse
 from datetime import date
+
+API_BASE_URL = "https://scraper-9vc4.onrender.com/equipment/balls"
 
 def _to_date(value):
     try:
@@ -38,20 +41,23 @@ def save_bowling_ball(ball_data: dict):
         "flare" : ball_data.get("flare")
     }
 
-    with Session(engine) as session:
-        existing = session.exec(
-            select(BowlingBall).where(BowlingBall.link == normalized_data["link"])
-        ).first()
-
-        if existing:
-            for key, value in normalized_data.items():
-                setattr(existing, key, value)
-            session.add(existing)
+    try:
+        payload = serialize_for_json(ball_data)
+        response = requests.post(API_BASE_URL, json=payload)
+        if response.status_code in [200, 201]:
+            print(f"✅ Added: {payload.get('title')}")
         else:
-            ball = BowlingBall(**normalized_data)
-            session.add(ball)
+            print(f"❌ Failed to add: {payload.get('title')} | {response.status_code} | {response.text}")
+    except Exception as e:
+        print(f"❌ Exception while adding ball: {e}")
 
-        session.commit()
+def serialize_for_json(data: dict):
+    def convert(value):
+        if isinstance(value, date):
+            return value.isoformat()
+        return value
+
+    return {key: convert(val) for key, val in data.items()}
 
 def _to_float(value):
     try:
